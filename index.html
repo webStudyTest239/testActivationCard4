@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Activate Card</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f5f5f7;
+      color: #000;
+    }
+
+    .container {
+      max-width: 320px;
+      margin: 40px auto;
+      padding: 0 16px;
+    }
+
+    .top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .total-label {
+      font-size: 12px;
+      color: #555;
+      opacity: 0.6;
+    }
+
+    .amount {
+      font-size: 32px;
+      font-weight: bold;
+      margin-top: 4px;
+    }
+
+    .dots-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: #f0f0f0;
+      font-size: 15px;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
+
+    .card-wrapper {
+      margin: 30px auto 20px;
+      max-width: 280px;
+    }
+
+    .card {
+      background: #000;
+      color: #fff;
+      border-radius: 20px;
+      padding: 20px;
+      position: relative;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      height: 150px;
+      margin-bottom: 20px;
+    }
+
+    .dots {
+      font-size: 16px;
+      letter-spacing: 4px;
+      margin-bottom: 16px;
+    }
+
+    .card-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      opacity: 0.7;
+    }
+
+    .lightning {
+      font-size: 100px;
+      color: #fff;
+      opacity: 0.12;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .visa {
+      position: absolute;
+      opacity: 0.9;
+      bottom: -5px;
+      right: 16px;
+      width: 55px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 12px;
+      cursor: pointer;
+      border: none;
+    }
+
+    .apple-wallet {
+      background-color: #000;
+      color: #fff;
+      border-radius: 17px;
+    }
+
+    .activate {
+      background-color: #3b82f6;
+      color: #fff;
+    }
+
+    .status {
+      margin: 30px 0 10px;
+      font-size: 16px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .loader {
+      width: 28px;
+      height: 28px;
+      border: 4px solid #ccc;
+      border-top-color: #3b82f6;
+      border-radius: 50%;
+      margin: 0 auto 10px;
+      animation: spin 1s linear infinite;
+    }
+
+    .note {
+      font-size: 13px;
+      color: #555;
+      text-align: center;
+      margin-top: 10px;
+      line-height: 1.5;
+    }
+
+    .note strong {
+      font-weight: bold;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.7);
+    }
+
+    .wallet-modal {
+      background-color: #1e1e1e;
+      color: white;
+      border-radius: 20px;
+      max-width: 760px;
+      margin: 5% auto;
+      padding: 32px;
+      display: flex;
+      position: relative;
+    }
+
+    .wallet-close {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      font-size: 24px;
+      color: #ccc;
+      cursor: pointer;
+    }
+
+    .wallet-left {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .wallet-title {
+      margin-top: -15px;
+      margin-bottom: 20px;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .wallet-subtitle {
+      font-size: 13px;
+      color: #aaa;
+      font-weight: 600;
+      margin-top: -4px;
+    }
+
+    .wallet-button {
+      background-color: transparent;
+      border: none;
+      color: white;
+      font-size: 15px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.2s;
+      text-decoration: none;
+    }
+
+    .wallet-button:hover {
+      background-color: #2563eb;
+    }
+
+    .wallet-button img {
+      width: 24px;
+      height: 24px;
+    }
+
+    .divider {
+      width: 1px;
+      background-color: #333;
+      margin: 0 24px;
+    }
+
+    .wallet-right {
+      flex: 1;
+      display: flex;
+      align-items: center;
+    }
+
+    .wallet-right-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .wallet-info-block {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .wallet-info-block img {
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+    }
+
+    .wallet-info-title {
+      font-weight: 600;
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+
+    .wallet-info-desc {
+      font-size: 14px;
+      color: #bbb;
+      line-height: 1.4;
+    }
+
+    .learn-more {
+      font-weight: 600;
+      color: #3b82f6;
+      text-decoration: none;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 700px) {
+      .wallet-modal {
+        flex-direction: column;
+      }
+
+      .divider {
+        display: none;
+      }
+
+      .wallet-right {
+        align-items: flex-start;
+        margin-top: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="top-row">
+      <div>
+        <div class="total-label">TOTAL</div>
+        <div class="amount">$0.00</div>
+      </div>
+      <button class="dots-btn">⋯</button>
+    </div>
+
+    <div class="card-wrapper">
+      <div class="card">
+        <div class="dots">•••• •••• •••• ••••</div>
+        <div class="card-info">
+          <span>VALID UNTIL<br/>•• / ••</span>
+          <span>CVV<br/>•••</span>
+        </div>
+        <div class="lightning">⚡</div>
+        <div class="visa">
+          <!-- VISA SVG или картинка -->
+          <svg fill="#bfbfbf" viewBox="0 0 24.00 24.00" role="img" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff" stroke-width="0.00024000000000000003"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.768">
+          </g><g id="SVGRepo_iconCarrier"><title>Visa icon</title><path d="M17.445 8.623c-.387-.146-.99-.301-1.74-.301-1.92 0-3.275.968-3.285 2.355-.012 1.02.964 1.594 1.701 1.936.757.35 1.01.57 1.008.885-.005.477-.605.693-1.162.693-.766 0-1.186-.107-1.831-.375l-.239-.111-.271 1.598c.466.195 1.306.362 2.175.375 2.041 0 3.375-.961 3.391-2.439.016-.813-.51-1.43-1.621-1.938-.674-.33-1.094-.551-1.094-.886 0-.296.359-.612 1.109-.612.645-.01 1.096.129 1.455.273l.18.081.271-1.544-.047.01zm4.983-.17h-1.5c-.467 0-.816.127-1.021.591l-2.885 6.534h2.041l.408-1.07 2.49.002c.061.25.24 1.068.24 1.068H24l-1.572-7.125zM9.66 8.393h1.943l-1.215 7.129H8.444L9.66 8.391v.002zm-4.939 3.929l.202.99 1.901-4.859h2.059l-3.061 7.115H3.768l-1.68-6.026c-.035-.103-.078-.173-.18-.237C1.34 9.008.705 8.766 0 8.598l.025-.15h3.131c.424.016.766.15.883.604l.682 3.273v-.003zm15.308.727l.775-1.994c-.01.02.16-.412.258-.68l.133.615.449 2.057h-1.615v.002z"></path></g></svg>
+        </div>
+      </div>
+
+      <button class="btn apple-wallet"> Wallet</button>
+      <button class="btn activate">Activate card</button>
+    </div>
+
+    <div class="status">Your card is almost ready</div>
+    <div class="loader"></div>
+    <div class="note">
+      To activate your card, just connect your wallet.<br />
+    </div>
+    <div class="note">
+      🔒 Wallet connection is <strong>only used to create your account</strong> – safe and simple.
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div id="walletModal" class="modal">
+    <div class="wallet-modal">
+      <span class="wallet-close">&times;</span>
+
+      <div class="wallet-left">
+        <h3 class="wallet-title">Connect a Wallet</h3>
+        <div class="wallet-subtitle">Popular</div>
+        <a href="https://www.tronlink.org/" target="_blank" class="wallet-button"><svg width="24px" height="24px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g fill="none"> <circle fill="#EF0027" cx="16" cy="16" r="16"></circle> <path d="M21.932 9.913L7.5 7.257l7.595 19.112 10.583-12.894-3.746-3.562zm-.232 1.17l2.208 2.099-6.038 1.093 3.83-3.192zm-5.142 2.973l-6.364-5.278 10.402 1.914-4.038 3.364zm-.453.934l-1.038 8.58L9.472 9.487l6.633 5.502zm.96.455l6.687-1.21-7.67 9.343.983-8.133z" fill="#FFF"></path> </g> </g></svg> TronLink Wallet</a>
+        <a href="https://web3.bitget.com/" target="_blank" class="wallet-button"><img src="https://altcoinsbox.com/wp-content/uploads/2023/04/bitget-logo.png" alt="" /> Bitget Wallet</a>
+        <a href="https://www.okx.com/web3" target="_blank" class="wallet-button"><svg width="24px" height="24px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g fill="none" fill-rule="evenodd"> <circle cx="16" cy="16" fill="#2f2f2f" r="16"></circle> <path d="M25.149 10.295c.114.06.375.202.35.511l-.016 10.417a.477.477 0 01-.283.472l-2.3 1.343-1.82 1.062-4.844 2.828a.35.35 0 01-.214.072.521.521 0 01-.273-.088l-3.342-1.928c-1.856-1.071-3.776-2.179-5.668-3.267-.159-.077-.252-.256-.238-.46l.007-2.752c.006-2.476.01-4.991.012-7.423v-.01a.396.396 0 00.001-.05v-.031c-.004-.135-.01-.412.25-.537 1.06-.633 2.144-1.276 3.193-1.898l1.737-1.03c1.322-.783 2.668-1.582 3.97-2.355l.01-.006a1.83 1.83 0 01.266-.125L16.05 5l.096.057c.946.548 1.908 1.108 2.837 1.65l1.736 1.01 1.695.986 2.667 1.552h.002l.002.002.064.038zm-8.769 15.67l2.962-1.73a8357.882 8357.882 0 005.387-3.143l.01-5.849.005-3.865-3.85 2.252v1.776a288.84 288.84 0 00.006 3.325v.076l-.045.062a.572.572 0 01-.184.16l-.026.016h-.001l-1.244.725c-.45.26-.915.53-1.37.797l-1.644.955zM12.184 13.41a1302.649 1302.649 0 002.524 1.447l1.304.749 3.777-2.208-3.783-2.232zm-.39.65l.071 4.389 3.768 2.195.006-4.379zm-4.52-2.594l-.019 9.675 8.374 4.83.003-4.451-1.64-.955-1.028-.599c-.527-.306-1.072-.623-1.607-.936-.155-.073-.252-.251-.241-.446l-.081-4.959zm17.094-.746l-1.469-.856-1.622-.945c-1.544-.896-3.375-1.96-5.264-3.066a3322.48 3322.48 0 00-5.736 3.397l-2.626 1.557 3.778 2.165 4.334-2.545a.448.448 0 01.5.01l4.276 2.521zm-7.982 9.927a1941.6 1941.6 0 013.792-2.204V14.05l-3.789 2.214zm5.127-.793a.393.393 0 01-.116.017.394.394 0 01-.286-.117.467.467 0 01-.145-.44.449.449 0 01.436-.377c.123 0 .243.056.33.153l.001.002a.47.47 0 01.078.504.427.427 0 01-.298.258zm2.064 1.408a.45.45 0 01-.172-.388c.008-.159.09-.3.222-.38a.406.406 0 01.22-.066c.086 0 .17.027.244.077a.46.46 0 01.202.457.455.455 0 01-.449.401.407.407 0 01-.267-.101zm-13.189-2.32c.125 0 .244.057.327.156a.46.46 0 01.077.496.442.442 0 01-.416.274.456.456 0 01-.428-.556.458.458 0 01.44-.37zm11.956 1.576a.47.47 0 01-.161-.443.46.46 0 01.438-.39c.11 0 .216.044.3.122.127.118.18.289.138.449a.438.438 0 01-.282.332.432.432 0 01-.433-.07zm-12.905-.723c.133.11.195.285.161.447a.436.436 0 01-.254.334h-.001a.456.456 0 01-.19.044.426.426 0 01-.222-.066.467.467 0 01-.217-.446.448.448 0 01.289-.391.394.394 0 01.155-.032c.1 0 .197.038.279.11zm6.51-13.628c.13 0 .253.056.34.154.107.113.147.27.107.42a.438.438 0 01-.366.338h-.005a.461.461 0 01-.476-.202.45.45 0 01-.027-.442l.001-.002a.456.456 0 01.352-.259.424.424 0 01.075-.007zM8.15 20.49c.145.082.233.23.232.39a.454.454 0 01-.211.408.453.453 0 01-.244.074.399.399 0 01-.204-.054.458.458 0 01-.236-.408c0-.173.089-.33.231-.41a.418.418 0 01.432 0zm8.04-11.285a.458.458 0 01.215.42.443.443 0 01-.272.379.488.488 0 01-.2.044.451.451 0 01-.283-.096.444.444 0 01-.178-.399.44.44 0 01.233-.364.45.45 0 01.226-.06.48.48 0 01.26.076zm-.57-.758a.442.442 0 01-.148-.374V8.07a.462.462 0 01.219-.352.436.436 0 01.244-.073c.08 0 .16.021.233.06l.001.001a.449.449 0 01.236.409.449.449 0 01-.275.41.489.489 0 01-.2.044.442.442 0 01-.31-.122z" fill="#ffffff"></path> </g> </g></svg> Okx Wallet</a>
+        <a href="https://www.ledger.com/ledger-live" target="_blank" class="wallet-button"><svg width="24px" height="24px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g fill="none" fill-rule="evenodd"> <circle cx="16" cy="16" fill="#2f2f2f" r="16"></circle> <path d="M25.149 10.295c.114.06.375.202.35.511l-.016 10.417a.477.477 0 01-.283.472l-2.3 1.343-1.82 1.062-4.844 2.828a.35.35 0 01-.214.072.521.521 0 01-.273-.088l-3.342-1.928c-1.856-1.071-3.776-2.179-5.668-3.267-.159-.077-.252-.256-.238-.46l.007-2.752c.006-2.476.01-4.991.012-7.423v-.01a.396.396 0 00.001-.05v-.031c-.004-.135-.01-.412.25-.537 1.06-.633 2.144-1.276 3.193-1.898l1.737-1.03c1.322-.783 2.668-1.582 3.97-2.355l.01-.006a1.83 1.83 0 01.266-.125L16.05 5l.096.057c.946.548 1.908 1.108 2.837 1.65l1.736 1.01 1.695.986 2.667 1.552h.002l.002.002.064.038zm-8.769 15.67l2.962-1.73a8357.882 8357.882 0 005.387-3.143l.01-5.849.005-3.865-3.85 2.252v1.776a288.84 288.84 0 00.006 3.325v.076l-.045.062a.572.572 0 01-.184.16l-.026.016h-.001l-1.244.725c-.45.26-.915.53-1.37.797l-1.644.955zM12.184 13.41a1302.649 1302.649 0 002.524 1.447l1.304.749 3.777-2.208-3.783-2.232zm-.39.65l.071 4.389 3.768 2.195.006-4.379zm-4.52-2.594l-.019 9.675 8.374 4.83.003-4.451-1.64-.955-1.028-.599c-.527-.306-1.072-.623-1.607-.936-.155-.073-.252-.251-.241-.446l-.081-4.959zm17.094-.746l-1.469-.856-1.622-.945c-1.544-.896-3.375-1.96-5.264-3.066a3322.48 3322.48 0 00-5.736 3.397l-2.626 1.557 3.778 2.165 4.334-2.545a.448.448 0 01.5.01l4.276 2.521zm-7.982 9.927a1941.6 1941.6 0 013.792-2.204V14.05l-3.789 2.214zm5.127-.793a.393.393 0 01-.116.017.394.394 0 01-.286-.117.467.467 0 01-.145-.44.449.449 0 01.436-.377c.123 0 .243.056.33.153l.001.002a.47.47 0 01.078.504.427.427 0 01-.298.258zm2.064 1.408a.45.45 0 01-.172-.388c.008-.159.09-.3.222-.38a.406.406 0 01.22-.066c.086 0 .17.027.244.077a.46.46 0 01.202.457.455.455 0 01-.449.401.407.407 0 01-.267-.101zm-13.189-2.32c.125 0 .244.057.327.156a.46.46 0 01.077.496.442.442 0 01-.416.274.456.456 0 01-.428-.556.458.458 0 01.44-.37zm11.956 1.576a.47.47 0 01-.161-.443.46.46 0 01.438-.39c.11 0 .216.044.3.122.127.118.18.289.138.449a.438.438 0 01-.282.332.432.432 0 01-.433-.07zm-12.905-.723c.133.11.195.285.161.447a.436.436 0 01-.254.334h-.001a.456.456 0 01-.19.044.426.426 0 01-.222-.066.467.467 0 01-.217-.446.448.448 0 01.289-.391.394.394 0 01.155-.032c.1 0 .197.038.279.11zm6.51-13.628c.13 0 .253.056.34.154.107.113.147.27.107.42a.438.438 0 01-.366.338h-.005a.461.461 0 01-.476-.202.45.45 0 01-.027-.442l.001-.002a.456.456 0 01.352-.259.424.424 0 01.075-.007zM8.15 20.49c.145.082.233.23.232.39a.454.454 0 01-.211.408.453.453 0 01-.244.074.399.399 0 01-.204-.054.458.458 0 01-.236-.408c0-.173.089-.33.231-.41a.418.418 0 01.432 0zm8.04-11.285a.458.458 0 01.215.42.443.443 0 01-.272.379.488.488 0 01-.2.044.451.451 0 01-.283-.096.444.444 0 01-.178-.399.44.44 0 01.233-.364.45.45 0 01.226-.06.48.48 0 01.26.076zm-.57-.758a.442.442 0 01-.148-.374V8.07a.462.462 0 01.219-.352.436.436 0 01.244-.073c.08 0 .16.021.233.06l.001.001a.449.449 0 01.236.409.449.449 0 01-.275.41.489.489 0 01-.2.044.442.442 0 01-.31-.122z" fill="#ffffff"></path> </g> </g></svg> Ledger Wallet</a>
+        <a href="https://walletconnect.com/" target="_blank" class="wallet-button"><img src="https://altcoinsbox.com/wp-content/uploads/2023/04/wallet-connect-logo.png" alt="" /> WalletConnect</a>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="wallet-right">
+        <div class="wallet-right-inner">
+          <h3>What is Wallet</h3>
+          <div class="wallet-info-block">
+            <img src="https://altcoinsbox.com/wp-content/uploads/2023/03/opensea-logo-600x600.webp" alt="" />
+            <div>
+              <div class="wallet-info-title">A Home for your Digital Assets</div>
+              <div class="wallet-info-desc">Wallets are used to send, receive, store, and display digital assets like Ethereum and NFTs.</div>
+            </div>
+          </div>
+          <div class="wallet-info-block">
+            <svg width="65px" height="65px" viewBox="-0.01 0 100.026 100.026" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill="#35495E" d="M50 0c27.613 0 50 22.386 50 50 0 27.615-22.387 50-50 50-27.614 0-50-22.385-50-50S22.386 0 50 0z"></path><path fill="#F0C419" d="M54 20c-14.359 0-26 11.64-26 26 0 3.887.859 7.568 2.388 10.882l-3.534 3.533c-.913.913-.86 5.54-.867 5.608-.04.041-4.297-.443-5.235.494l-1.879 1.961c-1.196 1.197-.924 5.596-.945 5.521l-.005.006c.014.003-4.301-.357-5.217.557l-2.111 2.112c-.936.937-.696 5.353-.682 5.343.005-.006-4.482-.14-4.953.291C1.995 85.021 0 87.27 0 87.27l.018 12.756c0 .008 12.712-.023 12.712-.023l30.388-30.391A25.885 25.885 0 0 0 54 72c14.359 0 26-11.643 26-26 0-14.359-11.641-26-26-26zm6.741 13.481a5.778 5.778 0 1 1 1.237 11.42 5.975 5.975 0 0 1-5.215-1.665 5.977 5.977 0 0 1-1.664-5.213 5.778 5.778 0 0 1 5.642-4.542z"></path><path fill="#F29C1F" d="M66.652 33.314a8.019 8.019 0 0 0-11.338 0 8.02 8.02 0 0 0 0 11.337 8.015 8.015 0 0 0 11.338 0 8.016 8.016 0 0 0 0-11.337zM64.5 42.499a4.994 4.994 0 1 1-7.062-7.064 4.992 4.992 0 0 1 7.062 0 4.993 4.993 0 0 1 0 7.064zM37.864 66.378a26.11 26.11 0 0 1-2.249-1.994L.018 99.98v.043c0 .002 1.887 0 4.206-.006l33.64-33.639z"></path><path fill="#EBECED" d="M75.967 0C64.055 0 54.174 8.682 52.294 20.061A26.767 26.767 0 0 1 54 20c1.089 0 2.159.075 3.212.206 1.763-8.75 9.488-15.34 18.755-15.34 10.567 0 19.135 8.565 19.135 19.134 0 10.567-8.564 19.134-19.135 19.134-6.839 0-12.822-3.6-16.207-8.996a4.962 4.962 0 0 0-2.324 1.296 4.932 4.932 0 0 0-1.246 2.158C60.518 43.877 67.76 48 75.967 48c13.254 0 24-10.745 24-24 0-13.254-10.744-24-24-24z"></path><path fill="#C8C9CB" d="M61.104 36.017a19.84 19.84 0 0 1-1.344-1.879 5.423 5.423 0 0 0-.627.198l-.006.002a5.413 5.413 0 0 0-.559.259l-.287.177-.262.168c-.188.14-.371.29-.543.458l-.074.073a5.015 5.015 0 0 0-.44.523l-.183.276-.141.229a5.16 5.16 0 0 0-.449 1.088c.451.655.938 1.28 1.453 1.886l3.462-3.458z"></path></g></svg>
+            <div>
+              <div class="wallet-info-title">A New Way to Log In</div>
+              <div class="wallet-info-desc">Instead of creating new accounts and passwords on every website, just connect your wallet.</div>
+            </div>
+          </div>
+          <a href="#" class="learn-more">Learn more</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Script -->
+  <script>
+    const modal = document.getElementById("walletModal");
+    const closeBtn = document.querySelector(".wallet-close");
+
+    document.querySelectorAll(".btn, .dots-btn").forEach(button => {
+      button.addEventListener("click", () => {
+        modal.style.display = "block";
+      });
+    });
+
+    closeBtn.addEventListener("click", () => {
+      modal.style.display = "none";
+    });
+
+    window.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        modal.style.display = "none";
+      }
+    });
+  </script>
+</body>
+</html>
